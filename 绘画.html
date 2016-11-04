@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+		canvas{
+			display: block;
+			box-shadow: -1px -1px 3px #ccc,1px 1px 3px #ccc;
+			margin: 20px auto;
+		}
+		#colorBox{ width: 300px; height: 30px; list-style: none; margin: 30px auto; }
+		#colorBox li{ width: 30px; height: 30px; float: left; margin-right: 10px;}
+		#colorBox li:hover{ cursor: pointer; }
+		.red{ background: red; }
+		.orange{ background: orange; }
+		.yellow{ background: yellow; }
+		.green{ background: green; }
+		.cyan{ background: cyan; }
+		.blue{ background: blue; }
+		.purple{ background: purple; }
+		#clearCanvas{ width: 150px; height: 30px; background: wheat; border: 0; display: block; margin: 0 auto; font-size: 16px; text-align: center; line-height: 30px; color: snow; }
+		#clearCanvas:hover{ cursor: pointer; }
+	</style>
+</head>
+<body>
+	<ul id='colorBox'>
+		<li class='red'></li>
+		<li class='orange'></li>
+		<li class='yellow'></li>
+		<li class='green'></li>
+		<li class='cyan'></li>
+		<li class='blue'></li>
+		<li class='purple'></li>
+	</ul>
+	<button id='clearCanvas'>清空画布</button>
+	<canvas id='mycanvas' width="500" height="500"></canvas>
+	<script>
+		var ctx=mycanvas.getContext('2d'),color,
+			colorList=colorBox.getElementsByTagName('li');
+			mycanvas.addEventListener('mousedown',getStartPoint,false);
+			//设置笔触起点
+			function getStartPoint(eve){
+				getColor();
+				console.log(color);	
+				ctx.strokeStyle=color;
+				console.log(ctx.strokeStyle);
+				ctx.moveTo(getPoint(eve,0),getPoint(eve,1));
+				document.addEventListener('mousemove',draw);
+			}
+			//开始绘制
+			function draw(ev){
+				//设置结束点
+				ctx.lineTo(getPoint(ev,0),getPoint(ev,1));
+				ctx.stroke(); //绘制
+			}
+			document.addEventListener('mouseup',stop);
+			//鼠标松开，停止绘制
+			function stop(){
+				document.removeEventListener('mousemove',draw,false);
+			}
+			//获取鼠标当前位置函数
+			function getPoint(eve,i){
+				var e=eve||event,
+					pointX=e.offsetX, //鼠标所在位置横坐标
+					pointY=e.offsetY, //鼠标所在位置纵坐标
+					point=[pointX,pointY];
+				return point[i];
+			}
+			//设置颜色
+			function getColor(){
+				for(var i=0,len=colorList.length;i<len;i++){
+					colorList[i].onclick=function(){
+							color='\''+this.className+'\'';
+						}
+				}
+			};
+			//清空画布
+				clearCanvas.onclick=function(){
+					ctx.clearRect(0,0,mycanvas.width,mycanvas.height);
+				}
+	</script>
+</body>
+</html>

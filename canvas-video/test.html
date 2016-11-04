@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>test</title>
+</head>
+<body>	
+	<video src='1.mp4' controls width="360" height="240"></video>
+	<canvas id='mycanvas' width='360' height="240" style='border: 1px solid #ccc'>你的浏览器不支持该功能，请升级到最新浏览器，获得更好体验</canvas>
+	<button id='btn'>截屏</button>
+	<script>
+		var ctx=mycanvas.getContext('2d');
+		var video=document.getElementsByTagName('video')[0],s;
+		//移动原点坐标到中心点
+		function draw(){
+			ctx.drawImage(video,0,0,360,240);
+			s=requestAnimationFrame(draw);
+		}
+		video.onplay=function(){
+			draw();
+		}
+		video.onpuase=function(){
+			s();
+		}
+		btn.onclick=function(){
+			//获取canvas对应的图片的Base64编码格式
+			var res=mycanvas.toDataURL();
+			var img=document.createElement('img');
+				img.src=res;
+				document.body.appendChild(img);
+		}
+	</script>
+</body>
+</html>
